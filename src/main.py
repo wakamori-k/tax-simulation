@@ -1,24 +1,34 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 from IncomeTax import IncomeTax
+from ResidentTax import ResidentTax
+from CommonDeductions import CommonDeductions
 
 def main():
-    income_taxs = []
-    min_income = 100
-    max_income = 5000
-    for total_income in range(min_income, max_income):
-        # 所得税
-        income_taxs.append(IncomeTax.calc(total_income))
-        # TODO: 社会保険料
+    total_incomes = list(range(100, 1100))
 
-        # TODO: 住民税
+    # 所得税
+    income_taxs = np.array(list(map(IncomeTax.calc, total_incomes)))
 
-    plt.plot(range(min_income, max_income), income_taxs)
-    # plt.xlim(min_income, max_income)
-    # plt.ylim(min_income, max_income)
-    plt.xlabel("earned income [ten thousand yen]")
-    plt.ylabel("income tax [ten thousand yen]")
+    # 住民税
+    resident_taxs = np.array(list(map(ResidentTax.calc, total_incomes)))
+
+    # 社会保険料
+    social_insurances = np.array(list(map(CommonDeductions.social_insurance, total_incomes)))
+
+    total_tax = income_taxs + resident_taxs + social_insurances
+
+    plt.plot(total_incomes, income_taxs, "--", label="Income tax")
+    plt.plot(total_incomes, resident_taxs, "--", label="Resident tax")
+    plt.plot(total_incomes, social_insurances, "--", label="Social insurance")
+    plt.plot(total_incomes, total_tax, label="Total")
+    plt.xlim(0, max(total_incomes))
+    # plt.ylim(0, max(total_incomes))
+    plt.xlabel("total income [ten thousand yen]")
+    plt.ylabel("tax [ten thousand yen]")
+    plt.legend()
     plt.show()    
 
 if __name__=="__main__":
