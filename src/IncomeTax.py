@@ -9,6 +9,7 @@ class IncomeTax(TaxAbstruct):
         earned_income = total_income - CommonDeductions.earned_income_decustion(total_income)
         # 課税所得額 = 給与所得額 - 所得控除額
         taxable_income = earned_income - cls.__calc_income_deduction(total_income)
+
         return cls.__calc_tax(taxable_income)
 
     # 所得控除 https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/shoto320.htm
@@ -74,7 +75,7 @@ class IncomeTax(TaxAbstruct):
         elif taxable_income <= 4000:
             return taxable_income * 0.4 - 279.6
         else:
-            return taxable_income * 0.45 - 479.6          
+            return taxable_income * 0.45 - 479.6
     
     # 復興特別所得税額 https://www.nta.go.jp/publication/pamph/koho/kurashi/html/02_1.htm
     @staticmethod
