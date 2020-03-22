@@ -10,6 +10,9 @@ def main():
     for total_income in range(min_income, max_income):
         # 所得税
         income_taxs.append(IncomeTax.calc(total_income))
+        # TODO: 社会保険料
+
+        # TODO: 住民税
 
     plt.plot(range(min_income, max_income), income_taxs)
     # plt.xlim(min_income, max_income)
