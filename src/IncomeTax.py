@@ -41,7 +41,7 @@ class IncomeTax(TaxAbstruct):
     @classmethod
     def __calc_tax(cls, taxable_income):
         income_tax = cls.__calc_income_tax(taxable_income)
-        return income_tax + IncomeTax.__calc_reconstruction_tax(income_tax)
+        return income_tax + cls.__calc_reconstruction_tax(income_tax)
 
     # 基礎控除 https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm
     @staticmethod
