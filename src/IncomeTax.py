@@ -1,12 +1,12 @@
 from TaxAbstruct import TaxAbstruct
-from SocialInsurance import SocialInsurance
-from EarnedIncomeDeduction import EarnedIncomeDeduction
+from CommonDeductions import CommonDeductions
+
 class IncomeTax(TaxAbstruct):
     # 所得税算出 https://www.nta.go.jp/publication/pamph/koho/kurashi/html/02_1.htm
     @classmethod
     def calc(cls, total_income):
         # 給与所得額 = 合計所得金額 - 給与所得控除額
-        earned_income = total_income - EarnedIncomeDeduction.calc(total_income)
+        earned_income = total_income - CommonDeductions.earned_income_decustion(total_income)
         # 課税所得額 = 給与所得額 - 所得控除額
         taxable_income = earned_income - cls.__calc_income_deduction(total_income)
         return cls.__calc_tax(taxable_income)
@@ -20,7 +20,7 @@ class IncomeTax(TaxAbstruct):
         deduction += cls.__calc_basic_deduction(total_income)
 
         # 社会保険料控除
-        deduction += SocialInsurance.calc(total_income)
+        deduction += CommonDeductions.social_insurance(total_income)
 
         # TODO: implement
         # 配偶者控除
