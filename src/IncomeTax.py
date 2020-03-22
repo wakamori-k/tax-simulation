@@ -1,22 +1,26 @@
 from TaxAbstruct import TaxAbstruct
 from SocialInsurance import SocialInsurance
-
+from EarnedIncomeDeduction import EarnedIncomeDeduction
 class IncomeTax(TaxAbstruct):
+    # 所得税算出 https://www.nta.go.jp/publication/pamph/koho/kurashi/html/02_1.htm
     @classmethod
-    def calc(cls, earned_income):
-        taxable_income = earned_income - cls.__calc_income_deduction(earned_income)
+    def calc(cls, total_income):
+        # 給与所得額 = 合計所得金額 - 給与所得控除額
+        earned_income = total_income - EarnedIncomeDeduction.calc(total_income)
+        # 課税所得額 = 給与所得額 - 所得控除額
+        taxable_income = earned_income - cls.__calc_income_deduction(total_income)
         return cls.__calc_tax(taxable_income)
 
     # 所得控除 https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/shoto320.htm
     @classmethod
-    def __calc_income_deduction(cls, earned_income):
-        deduction = 0
+    def __calc_income_deduction(cls, total_income):
+        deduction = 0.0
 
         # 基礎控除
-        deduction += cls.__calc_basic_deduction(earned_income)
+        deduction += cls.__calc_basic_deduction(total_income)
 
         # 社会保険料控除
-        deduction += SocialInsurance.calc(earned_income)
+        deduction += SocialInsurance.calc(total_income)
 
         # TODO: implement
         # 配偶者控除
@@ -41,18 +45,18 @@ class IncomeTax(TaxAbstruct):
 
     # 基礎控除 https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm
     @staticmethod
-    def __calc_basic_deduction(earnedIncome, afterR2 = True):
+    def __calc_basic_deduction(total_income, afterR2 = True):
         if afterR2: # 令和2年以降
-            if earnedIncome <= 2400:
-                return 48
-            elif earnedIncome <= 2450:
-                return 32
-            elif earnedIncome <= 2500:
-                return 16
+            if total_income <= 2400:
+                return 48.0
+            elif total_income <= 2450:
+                return 32.0
+            elif total_income <= 2500:
+                return 16.0
             else:
-                return 0
+                return 0.0
         else:
-            return 38
+            return 38.0
 
     # 所得税額 https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm 
     @staticmethod
