@@ -29,7 +29,8 @@ def main():
     plt.xlabel("total income [ten thousand yen]")
     plt.ylabel("tax [ten thousand yen]")
     plt.legend()
-    plt.show()    
+    # plt.show()
+    plt.savefig("tax.png")
 
 if __name__=="__main__":
     main()
