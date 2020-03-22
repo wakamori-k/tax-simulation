@@ -2,16 +2,17 @@ from TaxAbstruct import TaxAbstruct
 from CommonDeductions import CommonDeductions
 
 class ResidentTax(TaxAbstruct):
-    # 所得税算出 https://www.nta.go.jp/publication/pamph/koho/kurashi/html/02_1.htm
+    # 住民税算出
     @classmethod
     def calc(cls, total_income):
         # 給与所得額 = 合計所得金額 - 給与所得控除額
         earned_income = total_income - CommonDeductions.earned_income_decustion(total_income)
         # 課税所得額 = 給与所得額 - 所得控除額
         taxable_income = earned_income - cls.__calc_income_deduction(total_income)
+
         return cls.__calc_tax(taxable_income)
 
-    # 所得控除 https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/shoto320.htm
+    # 所得控除 https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_08
     @classmethod
     def __calc_income_deduction(cls, total_income):
         deduction = 0.0
@@ -42,7 +43,7 @@ class ResidentTax(TaxAbstruct):
     def __calc_tax(cls, taxable_income):
         return taxable_income * 0.1 + 0.5
 
-    # 基礎控除 https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm
+    # 基礎控除　https://www.e-zeirisi.com/kisokoujo-h30kaisei-12177.html
     @staticmethod
     def __calc_basic_deduction(total_income, afterR2 = True):
         if afterR2: # 令和2年以降
