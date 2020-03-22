@@ -8,7 +8,7 @@ def main():
     min_income = 100
     max_income = 5000
     for total_income in range(min_income, max_income):
-        # 課税対象所得算出
+        # 所得税
         income_taxs.append(IncomeTax.calc(total_income))
 
     plt.plot(range(min_income, max_income), income_taxs)
