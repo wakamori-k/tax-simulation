@@ -4,11 +4,13 @@ from CommonDeductions import CommonDeductions
 class ResidentTax(TaxAbstruct):
     # 住民税算出
     @classmethod
-    def calc(cls, total_income):
+    def calc(cls, total_income, additional_diduction=0):
         # 給与所得額 = 合計所得金額 - 給与所得控除額
         earned_income = total_income - CommonDeductions.earned_income_decustion(total_income)
         # 課税所得額 = 給与所得額 - 所得控除額
         taxable_income = earned_income - cls.__calc_income_deduction(total_income)
+        # 追加控除（年金の追納など）
+        taxable_income -= additional_diduction
 
         return cls.__calc_tax(taxable_income)
 

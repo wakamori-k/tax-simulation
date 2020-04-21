@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class TaxAbstruct(ABC):
     @classmethod
     @abstractmethod
-    def calc(cls, total_income):
+    def calc(cls, total_income, additional_diduction = 0):
         pass
     
     @classmethod

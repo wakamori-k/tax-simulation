@@ -7,18 +7,33 @@ from ResidentTax import ResidentTax
 from CommonDeductions import CommonDeductions
 
 def main():
-    total_incomes = list(range(130, 1100))
+    total_incomes = list(range(300, 900))
+    additional_payment = 90 # 年金の追納額
 
     # 所得税
     income_taxs = np.array(list(map(IncomeTax.calc, total_incomes)))
+    income_taxs_add_payment = np.array(list(map(IncomeTax.calc, total_incomes, [additional_payment for _ in range(len(total_incomes))])))
 
     # 住民税
     resident_taxs = np.array(list(map(ResidentTax.calc, total_incomes)))
+    resident_taxs_add_payment = np.array(list(map(ResidentTax.calc, total_incomes, [additional_payment for _ in range(len(total_incomes))])))
 
     # 社会保険料
     social_insurances = np.array(list(map(CommonDeductions.social_insurance, total_incomes)))
 
     total_tax = income_taxs + resident_taxs + social_insurances
+    total_tax_add_payment = income_taxs_add_payment + resident_taxs_add_payment + social_insurances
+
+    # 通常時と、学生納付特例制度で猶予されていた年金を追納したときの税金の差額
+    plt.plot(total_incomes, total_tax-total_tax_add_payment, color="red", label = "total tax")
+    plt.plot(total_incomes, income_taxs-income_taxs_add_payment, label="income tax")
+    plt.plot(total_incomes, resident_taxs-resident_taxs_add_payment, label="resident tax")
+    plt.xlabel("total income [ten thousand yen]")
+    plt.ylabel("tax deduction [ten thousand yen]")
+    plt.legend()
+    # plt.show()
+    plt.savefig("tax_diff_when_additional_payment.png")
+    plt.close()
 
     plt.plot(total_incomes, income_taxs, "--", label="Income tax")
     plt.plot(total_incomes, resident_taxs, "--", label="Resident tax")
